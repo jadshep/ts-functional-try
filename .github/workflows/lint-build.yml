@@ -34,5 +34,5 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          name: functional-try.tgz
+          name: functional-try-${{ github.head_ref }}.${{ github.sha }}.tgz
           path: functional-try-*.tgz
