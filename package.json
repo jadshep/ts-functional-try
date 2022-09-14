@@ -1,0 +1,20 @@
+{
+    "name": "functional-try",
+    "version": "1.0.0",
+    "author": "Jadeon Sheppard",
+    "license": "MIT",
+    "description": "Error handling wrapper for cleaner use of strict type checking in TypeScript",
+    "homepage": "https://github.com/jadshep/ts-functional-try",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jadshep/ts-functional-try.git"
+    },
+    "keywords": [
+        "typescript",
+        "strict",
+        "async",
+        "sync",
+        "exception",
+        "error"
+    ]
+}
