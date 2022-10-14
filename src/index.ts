@@ -4,12 +4,12 @@
 // Types //
 ///////////
 
-export type FailableReturn<T> = {
-    error: Error;
-    value: undefined;
+export type FailableReturn<TValue, TError = Error> = {
+    success: true;
+    value: TValue;
 } | {
-    error: null;
-    value: T;
+    success: false;
+    error: TError;
 };
 
 
@@ -24,19 +24,19 @@ export type FailableReturn<T> = {
  * @param args The arguments to pass to the function
  * @returns A `FailableReturn` with the function's return value or thrown error
  */
-export function trySync<A extends unknown[], R>(func: (...args: A) => R, ...args: A): FailableReturn<R> {
+export function trySync<A extends unknown[], TValue, TError = Error>(func: (...args: A) => TValue, ...args: A): FailableReturn<TValue, TError> {
     try {
         const value = func(...args);
 
         return {
-            error: null,
+            success: true,
             value,
         };
     }
     catch (err) {
         return {
-            error: err as Error,
-            value: undefined,
+            success: false,
+            error: err as TError,
         };
     }
 }
@@ -47,18 +47,18 @@ export function trySync<A extends unknown[], R>(func: (...args: A) => R, ...args
  * @param promise The promise to handle
  * @returns A `FailableReturn` with the promise's resulting value or error
  */
-export function tryAsync<R>(promise: Promise<R>): Promise<FailableReturn<R>> {
+export function tryAsync<TValue, TError = Error>(promise: Promise<TValue>): Promise<FailableReturn<TValue, TError>> {
     return promise
-        .then(function (value) {
+        .then(function (value: TValue): FailableReturn<TValue, TError> {
             return {
-                error: null,
+                success: true,
                 value,
             };
         })
-        .catch(function (error) {
+        .catch(function (error: TError): FailableReturn<TValue, TError> {
             return {
+                success: false,
                 error,
-                value: undefined,
             };
         });
 }
