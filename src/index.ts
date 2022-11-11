@@ -7,8 +7,10 @@
 export type FailableReturn<TValue, TError = Error> = {
     success: true;
     value: TValue;
+    error: undefined;
 } | {
     success: false;
+    value: undefined;
     error: TError;
 };
 
@@ -31,11 +33,13 @@ export function trySync<A extends unknown[], TValue, TError = Error>(func: (...a
         return {
             success: true,
             value,
+            error: undefined,
         };
     }
     catch (err) {
         return {
             success: false,
+            value: undefined,
             error: err as TError,
         };
     }
@@ -53,11 +57,13 @@ export function tryAsync<TValue, TError = Error>(promise: Promise<TValue>): Prom
             return {
                 success: true,
                 value,
+                error: undefined,
             };
         })
         .catch(function (error: TError): FailableReturn<TValue, TError> {
             return {
                 success: false,
+                value: undefined,
                 error,
             };
         });
