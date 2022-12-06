@@ -5,19 +5,48 @@
 ///////////
 
 export type FailableReturn<TValue, TError = Error> = {
-    success: true;
-    value: TValue;
-    error: undefined;
+    readonly success: true;
+    readonly failure: false;
+
+    readonly value: TValue;
+    readonly error: undefined;
 } | {
-    success: false;
-    value: undefined;
-    error: TError;
+    readonly success: false;
+    readonly failure: true;
+
+    readonly value: undefined;
+    readonly error: TError;
 };
 
 
-///////////
-// Utils //
-///////////
+////////////////////
+// Internal utils //
+////////////////////
+
+function createSuccess<TValue, TError>(value: TValue): FailableReturn<TValue, TError> {
+    return Object.freeze({
+        success: true,
+        failure: false,
+
+        value,
+        error: undefined,
+    });
+}
+
+function createFailure<TValue, TError>(error: TError): FailableReturn<TValue, TError> {
+    return Object.freeze({
+        success: false,
+        failure: true,
+
+        value: undefined,
+        error,
+    });
+}
+
+
+//////////////////
+// Public utils //
+//////////////////
 
 /**
  * Safely executes a function and returns the resulting value or error
@@ -28,20 +57,10 @@ export type FailableReturn<TValue, TError = Error> = {
  */
 export function trySync<A extends unknown[], TValue, TError = Error>(func: (...args: A) => TValue, ...args: A): FailableReturn<TValue, TError> {
     try {
-        const value = func(...args);
-
-        return {
-            success: true,
-            value,
-            error: undefined,
-        };
+        return createSuccess(func(...args));
     }
-    catch (err) {
-        return {
-            success: false,
-            value: undefined,
-            error: err as TError,
-        };
+    catch (error) {
+        return createFailure(error as TError);
     }
 }
 
@@ -53,18 +72,7 @@ export function trySync<A extends unknown[], TValue, TError = Error>(func: (...a
  */
 export function tryAsync<TValue, TError = Error>(promise: Promise<TValue>): Promise<FailableReturn<TValue, TError>> {
     return promise
-        .then(function (value: TValue): FailableReturn<TValue, TError> {
-            return {
-                success: true,
-                value,
-                error: undefined,
-            };
-        })
-        .catch(function (error: TError): FailableReturn<TValue, TError> {
-            return {
-                success: false,
-                value: undefined,
-                error,
-            };
-        });
+        .then(createSuccess as typeof createSuccess<TValue, TError>)
+        .catch(createFailure as typeof createFailure<TValue, TError>)
+    ;
 }
