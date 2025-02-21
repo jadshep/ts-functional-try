@@ -1,6 +1,6 @@
 {
     "name": "functional-try",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "author": "Jadeon Sheppard",
     "license": "MIT",
     "description": "Error handling wrapper for cleaner use of strict type checking in TypeScript",
