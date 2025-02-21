@@ -55,7 +55,7 @@ import { trySync, tryAsync } from 'functional-try';
 ```ts
 const parsedJson = trySync(JSON.parse, fileString);
 
-if (!parsedJson.success) {
+if (parsedJson.failure) {
     console.log('Error parsing JSON', parsedJson.error);
     return;
 }
@@ -69,7 +69,7 @@ handleSuccess(parsedJson.value);
 ```ts
 const asyncRes = await tryAsync(someAsyncFunction(params));
 
-if (!asyncRes.success) {
+if (asyncRes.failure) {
     handleError(asyncRes.error);
     return;
 }
