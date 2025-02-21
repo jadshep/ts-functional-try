@@ -60,6 +60,8 @@ if (parsedJson.failure) {
     return;
 }
 
+// TypeScript recognises `value` must have a value here
+// since the failure state is handled
 handleSuccess(parsedJson.value);
 ```
 
@@ -70,9 +72,11 @@ handleSuccess(parsedJson.value);
 const asyncRes = await tryAsync(someAsyncFunction(params));
 
 if (asyncRes.failure) {
-    handleError(asyncRes.error);
+    console.log('Error calling async function', asyncRes.error);
     return;
 }
 
+// TypeScript recognises `value` must have a value here
+// since the failure state is handled
 handleSuccess(apiRes.value);
 ```
