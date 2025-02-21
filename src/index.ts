@@ -1,8 +1,8 @@
 
 
-///////////
-// Types //
-///////////
+//
+// Types
+//
 
 export type FailableReturn<TValue, TError = Error> = {
     readonly success: true;
@@ -19,9 +19,9 @@ export type FailableReturn<TValue, TError = Error> = {
 };
 
 
-////////////////////
-// Internal utils //
-////////////////////
+//
+// Internal utils
+//
 
 function createSuccess<TValue, TError>(value: TValue): FailableReturn<TValue, TError> {
     return Object.freeze({
@@ -44,9 +44,9 @@ function createFailure<TValue, TError>(error: TError): FailableReturn<TValue, TE
 }
 
 
-//////////////////
-// Public utils //
-//////////////////
+//
+// Public utils
+//
 
 /**
  * Safely executes a function and returns the resulting value or error
