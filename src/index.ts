@@ -3,21 +3,25 @@ export namespace FunctionalTry {
     // Types
     //
 
+    export type FailableReturnSuccess<TValue> = {
+        readonly success: true;
+        readonly failure: false;
+
+        readonly value: TValue;
+        readonly error: undefined;
+    };
+
+    export type FailableReturnFailure<TError = Error> = {
+        readonly success: false;
+        readonly failure: true;
+
+        readonly value: undefined;
+        readonly error: TError;
+    };
+
     export type FailableReturn<TValue, TError = Error> =
-        | {
-              readonly success: true;
-              readonly failure: false;
-
-              readonly value: TValue;
-              readonly error: undefined;
-          }
-        | {
-              readonly success: false;
-              readonly failure: true;
-
-              readonly value: undefined;
-              readonly error: TError;
-          };
+        | FailableReturnSuccess<TValue>
+        | FailableReturnFailure<TError>;
 
     //
     // Internal utils
