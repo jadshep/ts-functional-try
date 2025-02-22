@@ -1,0 +1,35 @@
+name: Publish to NPM
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 22
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Authenticate with NPM
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Publish to NPM
+        run: npm publish
