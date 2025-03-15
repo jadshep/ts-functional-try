@@ -25,7 +25,8 @@
     "scripts": {
         "lint": "eslint .",
         "build": "rimraf dist && tsc",
-        "prepack": "npm run build"
+        "prepack": "npm run build",
+        "test": "jest"
     },
     "devDependencies": {
         "@types/jest": "^29.5.14",
