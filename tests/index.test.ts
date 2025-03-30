@@ -64,7 +64,7 @@ describe('tryAsync', () => {
         });
     });
 
-    it('should not catch errors thrown in a non-async function', async () => {
+    it('should not catch errors thrown in a non-async function', () => {
         expect(() => {
             tryAsync(
                 (() => {
