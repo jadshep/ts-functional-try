@@ -48,4 +48,29 @@ describe('tryAsync', () => {
             error: new Error('Hello'),
         });
     });
+
+    it('should return failure for an error thrown in an async function before any awaits', async () => {
+        const result = await tryAsync(
+            (async () => {
+                throw new Error('Hello');
+            })(),
+        );
+
+        expect(result).toEqual({
+            success: false,
+            failure: true,
+            value: undefined,
+            error: new Error('Hello'),
+        });
+    });
+
+    it('should not catch errors thrown in a non-async function', async () => {
+        expect(() => {
+            tryAsync(
+                (() => {
+                    throw new Error('Hello');
+                })(),
+            );
+        }).toThrow(new Error('Hello'));
+    });
 });
